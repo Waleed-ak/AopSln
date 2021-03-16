@@ -67,15 +67,15 @@ namespace Tools
 
     #region Public Methods
 
-    public static T Factory<T>(object concrete) => (T)Activator.CreateInstance(CreateType<T>(),new[] { concrete });
-
-    public static object Factory(Type interFacetype,object concrete) => Activator.CreateInstance(interFacetype,new[] { concrete });
-
     public static void Save() => _AssemblyBuilder.Value.Save(_AssemblyName + ".dll");
 
     #endregion Public Methods
 
     #region Internal Methods
+
+    internal static Type CreateType<T>() => CreateType(typeof(T));
+
+    internal static Type CreateType(Type type) => _DicType.TryGetValue(type,out var outType) ? outType : _DicType[type] = CreateTypeUncachedAsync(type).Result;
 
     internal static bool IsTask(this Type type) => _TypeTask.IsAssignableFrom(type);
 
@@ -372,10 +372,6 @@ namespace Tools
         temp.SetSetMethod(set);
       }
     }
-
-    private static Type CreateType<T>() => CreateType(typeof(T));
-
-    private static Type CreateType(Type type) => _DicType.TryGetValue(type,out var outType) ? outType : _DicType[type] = CreateTypeUncachedAsync(type).Result;
 
     private static Task<TypeBuilder> CreateTypeBuilderAsync(Type type)
        => Task.FromResult(_ModuleBuilder.Value.DefineType(

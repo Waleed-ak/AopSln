@@ -6,7 +6,7 @@ namespace Tools
   {
     #region Public Methods
 
-    public static T GetInstance<T>() => AopWrapper.Factory<T>(new TargetInterceptor());
+    public static T GetInstance<T>() => AopInterceptor.Factory<T>(new TargetInterceptor());
 
     #endregion Public Methods
 

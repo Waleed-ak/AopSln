@@ -11,6 +11,10 @@ namespace Tools
 
     #region Public Methods
 
+    public static T Factory<T>(AopInterceptor interceptor) => (T)Activator.CreateInstance(AopWrapper.CreateType<T>(),new[] { interceptor });
+
+    public static object Factory(Type interFacetype,AopInterceptor interceptor) => Activator.CreateInstance(AopWrapper.CreateType(interFacetype),new[] { interceptor });
+
     public void _Action(string key,object[] args,Type[] types) => InvokeMethodAction(key,_Lookups._Methods[key],args,types);
 
     public async Task _ActionAsync(string key,object[] args,Type[] types) => await InvokeMethodActionAsync(key,_Lookups._Methods[key],args,types).ConfigureAwait(false);

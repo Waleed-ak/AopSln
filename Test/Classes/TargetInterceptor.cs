@@ -11,26 +11,26 @@ namespace Tools
 
     #region Protected Methods
 
-    protected override void InvokeMethodAction(string key,ItemMethod item,object[] args,Type[] types)
+    protected override void InvokeMethod(string key,ItemMethod item,object[] args,Type[] types)
     {
-      RunMethodAction(key,CurrentObject,args,types);
+      RunMethod(key,CurrentObject,args,types);
     }
 
-    protected override async Task InvokeMethodActionAsync(string key,ItemMethod item,object[] args,Type[] types)
+    protected override T InvokeMethod<T>(string key,ItemMethod item,object[] args,Type[] types)
     {
-      await RunMethodActionAsync(key,CurrentObject,args,types).ConfigureAwait(false);
-    }
-
-    protected override T InvokeMethodFunc<T>(string key,ItemMethod item,object[] args,Type[] types)
-    {
-      var obj = RunMethodFunc<T>(key,CurrentObject,args,types);
+      var obj = RunMethod<T>(key,CurrentObject,args,types);
 
       return obj;
     }
 
-    protected override async Task<T> InvokeMethodFuncAsync<T>(string key,ItemMethod item,object[] args,Type[] types)
+    protected override async Task InvokeMethodAsync(string key,ItemMethod item,object[] args,Type[] types)
     {
-      var res = await RunMethodFuncAsync<T>(key,CurrentObject,args,types).ConfigureAwait(false);
+      await RunMethodAsync(key,CurrentObject,args,types).ConfigureAwait(false);
+    }
+
+    protected override async Task<T> InvokeMethodAsync<T>(string key,ItemMethod item,object[] args,Type[] types)
+    {
+      var res = await RunMethodAsync<T>(key,CurrentObject,args,types).ConfigureAwait(false);
 
       return res;
     }

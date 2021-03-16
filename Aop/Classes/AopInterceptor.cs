@@ -15,13 +15,13 @@ namespace Tools
 
     public static object Factory(Type interFacetype,AopInterceptor interceptor) => Activator.CreateInstance(AopWrapper.CreateType(interFacetype),new[] { interceptor });
 
-    public void _Action(string key,object[] args,Type[] types) => InvokeMethodAction(key,_Lookups._Methods[key],args,types);
+    public void _Action(string key,object[] args,Type[] types) => InvokeMethod(key,_Lookups._Methods[key],args,types);
 
-    public async Task _ActionAsync(string key,object[] args,Type[] types) => await InvokeMethodActionAsync(key,_Lookups._Methods[key],args,types).ConfigureAwait(false);
+    public async Task _ActionAsync(string key,object[] args,Type[] types) => await InvokeMethodAsync(key,_Lookups._Methods[key],args,types).ConfigureAwait(false);
 
-    public T _Func<T>(string key,object[] args,Type[] types) => InvokeMethodFunc<T>(key,_Lookups._Methods[key],args,types);
+    public T _Func<T>(string key,object[] args,Type[] types) => InvokeMethod<T>(key,_Lookups._Methods[key],args,types);
 
-    public async Task<T> _FuncAsync<T>(string key,object[] args,Type[] types) => await InvokeMethodFuncAsync<T>(key,_Lookups._Methods[key],args,types).ConfigureAwait(false);
+    public async Task<T> _FuncAsync<T>(string key,object[] args,Type[] types) => await InvokeMethodAsync<T>(key,_Lookups._Methods[key],args,types).ConfigureAwait(false);
 
     public T _PropertyGet<T>(string key,object[] args) => InvokePropertyGet<T>(key,_Lookups._Properties[key],args);
 
@@ -33,25 +33,25 @@ namespace Tools
 
     #region Protected Methods
 
-    protected abstract void InvokeMethodAction(string key,ItemMethod methodInfo,object[] args,Type[] types);
+    protected abstract void InvokeMethod(string key,ItemMethod methodInfo,object[] args,Type[] types);
 
-    protected abstract Task InvokeMethodActionAsync(string key,ItemMethod methodInfo,object[] args,Type[] types);
+    protected abstract T InvokeMethod<T>(string key,ItemMethod methodInfo,object[] args,Type[] types);
 
-    protected abstract T InvokeMethodFunc<T>(string key,ItemMethod methodInfo,object[] args,Type[] types);
+    protected abstract Task InvokeMethodAsync(string key,ItemMethod methodInfo,object[] args,Type[] types);
 
-    protected abstract Task<T> InvokeMethodFuncAsync<T>(string key,ItemMethod methodInfo,object[] args,Type[] types);
+    protected abstract Task<T> InvokeMethodAsync<T>(string key,ItemMethod methodInfo,object[] args,Type[] types);
 
     protected abstract T InvokePropertyGet<T>(string key,ItemProperty propertyInfo,object[] args);
 
     protected abstract void InvokePropertySet<T>(string key,ItemProperty propertyInfo,T value,object[] args);
 
-    protected void RunMethodAction(string key,object obj,object[] args,Type[] types) => _ = _Lookups._DelMethod[key].Value(obj,args,types);
+    protected void RunMethod(string key,object obj,object[] args,Type[] types) => _ = _Lookups._DelMethod[key].Value(obj,args,types);
 
-    protected Task RunMethodActionAsync(string key,object obj,object[] args,Type[] types) => (Task)_Lookups._DelTask[key].Value(obj,args,types);
+    protected T RunMethod<T>(string key,object obj,object[] args,Type[] types) => (T)_Lookups._DelMethod[key].Value(obj,args,types);
 
-    protected T RunMethodFunc<T>(string key,object obj,object[] args,Type[] types) => (T)_Lookups._DelMethod[key].Value(obj,args,types);
+    protected Task RunMethodAsync(string key,object obj,object[] args,Type[] types) => (Task)_Lookups._DelTask[key].Value(obj,args,types);
 
-    protected Task<T> RunMethodFuncAsync<T>(string key,object obj,object[] args,Type[] types) => (Task<T>)_Lookups._DelTask[key].Value(obj,args,types);
+    protected Task<T> RunMethodAsync<T>(string key,object obj,object[] args,Type[] types) => (Task<T>)_Lookups._DelTask[key].Value(obj,args,types);
 
     protected T RunPropertyGet<T>(string key,object obj,object[] args) => (T)_Lookups._DelPropertyGet[key].Value(obj,args);
 
